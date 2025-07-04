@@ -10,6 +10,8 @@ import DriverPartners from "./pages/DriverPartners";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import ScrolltoTop from "./components/ScrolltoTop";
+import DriverPage from './pages/DriverPage';
+
 
 function App() {
   const [login, setlogin] = useState(localStorage.getItem('token') ? true : false);
@@ -27,6 +29,7 @@ function App() {
               <Route path="/support" element={<SupportPage />} />
               <Route path="/login" element={<Login setlogin={setlogin} />} />
               <Route path="/register" element={<Register />} />
+              <Route path="/driver-page" element={<DriverPage />} />
             </Routes>
           </main>
           <Footer />
