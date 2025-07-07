@@ -11,6 +11,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import ScrolltoTop from "./components/ScrolltoTop";
 import DriverPage from './pages/DriverPage';
+import AdminPage from './pages/AdminPage';
 
 
 function App() {
@@ -30,6 +31,7 @@ function App() {
               <Route path="/login" element={<Login setlogin={setlogin} />} />
               <Route path="/register" element={<Register />} />
               <Route path="/driver-page" element={<DriverPage />} />
+              <Route path="/admin" element={<AdminPage />} /> 
             </Routes>
           </main>
           <Footer />

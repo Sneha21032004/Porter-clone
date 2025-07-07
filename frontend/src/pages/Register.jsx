@@ -47,10 +47,10 @@ const Register = () => {
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
       newErrors.email = 'Please enter a valid email';
     }
-     if (!formData.contact) {
-      newErrors.contact = 'Contact number is required'; 
+    if (!formData.contact) {
+      newErrors.contact = 'Contact number is required';
     } else if (!/^\d{10}$/.test(formData.contact)) {
-      newErrors.contact = 'Enter a valid 10-digit number'; 
+      newErrors.contact = 'Enter a valid 10-digit number';
     }
 
     if (!formData.password) {
@@ -79,7 +79,14 @@ const Register = () => {
       const response = await fetch('http://localhost:3000/api/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
+        body: JSON.stringify({
+          name: formData.username,
+          email: formData.email,
+          password: formData.password,
+          phoneno: formData.contact,
+          usertype: formData.role
+        })
+
       });
 
       if (!response.ok) {
@@ -94,8 +101,8 @@ const Register = () => {
 
     } catch (error) {
       if (error.message.includes('ERR_CONNECTION_REFUSED') ||
-          error.message.includes('Failed to fetch') ||
-          error.message.includes('NetworkError')) {
+        error.message.includes('Failed to fetch') ||
+        error.message.includes('NetworkError')) {
         setSubmitError('Backend server is not running. Please start your server on http://localhost:3000');
       } else {
         setSubmitError(error.message || 'Registration failed. Please try again.');
@@ -125,9 +132,8 @@ const Register = () => {
                 name="username"
                 value={formData.username}
                 onChange={handleChange}
-                className={`w-full px-4 py-3 border rounded-lg ${
-                  errors.username ? 'border-red-300 bg-red-50' : 'border-gray-300 hover:border-gray-400'
-                }`}
+                className={`w-full px-4 py-3 border rounded-lg ${errors.username ? 'border-red-300 bg-red-50' : 'border-gray-300 hover:border-gray-400'
+                  }`}
                 placeholder="Enter your username"
               />
               {errors.username && <p className="mt-1 text-sm text-red-600">{errors.username}</p>}
@@ -142,15 +148,14 @@ const Register = () => {
                 name="email"
                 value={formData.email}
                 onChange={handleChange}
-                className={`w-full px-4 py-3 border rounded-lg ${
-                  errors.email ? 'border-red-300 bg-red-50' : 'border-gray-300 hover:border-gray-400'
-                }`}
+                className={`w-full px-4 py-3 border rounded-lg ${errors.email ? 'border-red-300 bg-red-50' : 'border-gray-300 hover:border-gray-400'
+                  }`}
                 placeholder="you@example.com"
               />
               {errors.email && <p className="mt-1 text-sm text-red-600">{errors.email}</p>}
             </div>
             {/* Contact Number */}
-             <div>
+            <div>
               <label htmlFor="contact" className="block text-sm font-medium text-gray-700 mb-2">Contact Number</label>
               <input
                 type="tel"
@@ -158,9 +163,8 @@ const Register = () => {
                 name="contact"
                 value={formData.contact}
                 onChange={handleChange}
-                className={`w-full px-4 py-3 border rounded-lg ${
-                  errors.contact ? 'border-red-300 bg-red-50' : 'border-gray-300 hover:border-gray-400'
-                }`}
+                className={`w-full px-4 py-3 border rounded-lg ${errors.contact ? 'border-red-300 bg-red-50' : 'border-gray-300 hover:border-gray-400'
+                  }`}
                 placeholder="Enter your 10-digit phone number"
               />
               {errors.contact && <p className="mt-1 text-sm text-red-600">{errors.contact}</p>}
@@ -176,9 +180,8 @@ const Register = () => {
                   name="password"
                   value={formData.password}
                   onChange={handleChange}
-                  className={`w-full px-4 py-3 pr-12 border rounded-lg ${
-                    errors.password ? 'border-red-300 bg-red-50' : 'border-gray-300 hover:border-gray-400'
-                  }`}
+                  className={`w-full px-4 py-3 pr-12 border rounded-lg ${errors.password ? 'border-red-300 bg-red-50' : 'border-gray-300 hover:border-gray-400'
+                    }`}
                   placeholder="Create a password"
                 />
                 <button
@@ -200,9 +203,8 @@ const Register = () => {
                 name="role"
                 value={formData.role}
                 onChange={handleChange}
-                className={`w-full px-4 py-3 border rounded-lg ${
-                  errors.role ? 'border-red-300 bg-red-50' : 'border-gray-300 hover:border-gray-400'
-                }`}
+                className={`w-full px-4 py-3 border rounded-lg ${errors.role ? 'border-red-300 bg-red-50' : 'border-gray-300 hover:border-gray-400'
+                  }`}
               >
                 <option value="">Select Role</option>
                 <option value="user">User</option>
@@ -233,9 +235,8 @@ const Register = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className={`w-full font-semibold py-3 px-4 rounded-lg ${
-                isLoading ? 'bg-gray-400 cursor-not-allowed' : 'bg-gradient-to-r from-blue-600 to-cyan-500 text-white hover:shadow-lg hover:scale-105'
-              }`}
+              className={`w-full font-semibold py-3 px-4 rounded-lg ${isLoading ? 'bg-gray-400 cursor-not-allowed' : 'bg-gradient-to-r from-blue-600 to-cyan-500 text-white hover:shadow-lg hover:scale-105'
+                }`}
             >
               {isLoading ? 'Creating Account...' : 'Create Account'}
             </button>
