@@ -4,7 +4,7 @@ const db = await mysql.createConnection({
   port: 3306,
   host: 'localhost',
   user: 'root',
-  password: 'Anupaksh@123#',
+  password: 'test',
   database: 'porter_db'
 });
 

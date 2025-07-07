@@ -14,7 +14,7 @@ const DriverPage = () => {
 
     try {
       const token = localStorage.getItem('token');
-      const res = await fetch('http://localhost:3000/api/driver/upload-verification', {
+      const res = await fetch('http://localhost:3000/api/upload/upload-verification', {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,

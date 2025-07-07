@@ -30,16 +30,15 @@ router.get('/drivers', verifyToken, verifyAdmin, async (req, res) => {
 // PATCH /api/admin/driver-status/:id
 router.patch('/driver-status/:id', verifyToken, verifyAdmin, async (req, res) => {
   const { id } = req.params; // This should be the document's id
-  const { status, reason } = req.body;
-
+  const { status } = req.body;
   if (!['Approved', 'Rejected'].includes(status)) {
     return res.status(400).json({ error: 'Invalid status' });
   }
 
   try {
     const [result] = await db.execute(
-      'UPDATE driver_documents SET status = ?, reason = ? WHERE id = ?',
-      [status, reason || null, id]
+      'UPDATE driver_documents SET status = ? WHERE id = ?',
+      [status, id]
     );
     if (result.affectedRows === 0) {
       return res.status(404).json({ error: 'Document not found or not updated.' });
