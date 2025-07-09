@@ -40,6 +40,15 @@ const EstimateSection = ({login}) => {
     };
   }, []);
 
+  // Dummy distance for price calculation
+  const dummyDistance = 12; // in km
+  const vehicleRates = {
+    two_wheelers: 10, // per km
+    trucks: 30,
+    packers_movers: 25,
+    intercity_courier: 15
+  };
+
   const handleEstimate = () => {
     if(login){
       setModalOpen(true);
@@ -48,9 +57,27 @@ const EstimateSection = ({login}) => {
     }
   };
 
+  const handleModalSubmit = (form) => {
+    // form.service, form.pickup, form.drop, etc.
+    const rate = vehicleRates[form.service] || 10;
+    const calculatedPrice = dummyDistance * rate;
+    navigate('/estimate/confirm', {
+      state: {
+        pickup: form.pickup,
+        drop: form.drop,
+        vehicle: form.service,
+        price: calculatedPrice,
+        distance: dummyDistance,
+        name: form.name,
+        phone: form.phone,
+        userType: form.userType
+      }
+    });
+  };
+
   return (
     <section className="estimate-section w-full bg-gradient-to-br from-[var(--primary-bg)] via-[var(--white)] to-[var(--secondary-bg)] py-20 relative overflow-hidden">
-      <EstimateModal open={modalOpen} onClose={() => setModalOpen(false)} />
+      <EstimateModal open={modalOpen} onClose={() => setModalOpen(false)} onSubmit={handleModalSubmit} />
       {/* Enhanced Background decorative elements */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-20 left-10 w-32 h-32 bg-[var(--primary-color)]/10 rounded-full blur-3xl animate-float"></div>
