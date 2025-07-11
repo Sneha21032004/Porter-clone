@@ -22,9 +22,16 @@ const EstimateConfirm = () => {
   const { pickup, drop, vehicle, price, distance } = data;
 
   const handleConfirm = () => {
-    alert('Booking confirmed! (Demo)');
-    navigate('/');
-  };
+  navigate('/payment', {
+    state: {
+      pickup,
+      drop,
+      vehicle,
+      price,
+      distance
+    }
+  });
+};
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-[var(--primary-bg)] via-[var(--white)] to-[var(--secondary-bg)] py-12 px-4">

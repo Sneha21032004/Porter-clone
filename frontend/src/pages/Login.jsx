@@ -64,7 +64,7 @@ const Login = ({ setlogin }) => {
       setlogin(true);
       // ✅ Role-based redirection
       if (data.role === 'admin') {
-        navigate('/admin');
+        navigate('/admin/dashboard');
       } else if (data.role === 'driver') {
         navigate('/driver-page');
       } else {
