@@ -20,58 +20,58 @@ const stories = [
     rating: 5
   }
 ];
-
 const CustomerStories = () => (
-  <section className="customer-stories py-20 bg-gradient-to-br from-[var(--secondary-bg)] via-[var(--white)] to-[var(--primary-bg)] relative overflow-hidden">
-    {/* Background decorative elements */}
-    <div className="absolute inset-0 pointer-events-none">
-      <div className="absolute top-20 right-10 w-32 h-32 bg-[var(--secondary-color)]/10 rounded-full blur-3xl animate-float"></div>
-      <div className="absolute bottom-20 left-10 w-40 h-40 bg-[var(--primary-color)]/10 rounded-full blur-3xl animate-float" style={{animationDelay: '2s'}}></div>
+  <section className="customer-stories py-20 bg-gradient-to-br from-[#f3fff7] via-[#fcfcfd] to-[#ece9f7] relative overflow-hidden">
+    {/* Decorative background blobs */}
+    <div className="absolute inset-0 pointer-events-none z-0">
+      <div className="absolute top-14 left-1/3 w-32 h-32 bg-[#3ec9a7]/12 rounded-full blur-3xl"></div>
+      <div className="absolute bottom-12 right-1/3 w-44 h-44 bg-[#bca8f3]/16 rounded-full blur-3xl"></div>
+      <div className="absolute bottom-16 left-20 w-36 h-36 bg-[#4d21b9]/12 rounded-full blur-3xl"></div>
     </div>
 
     <div className="max-w-6xl mx-auto px-4 relative z-10">
       <div className="text-center mb-16">
-        <h2 className="text-4xl md:text-5xl font-bold mb-6 gradient-text p-2">Happy Stories</h2>
-        <p className="text-xl text-[var(--text-secondary)] max-w-3xl mx-auto">
+        <h2 className="text-4xl md:text-5xl font-extrabold mb-6 text-[#2e1967]">Happy Stories</h2>
+        <p className="text-xl text-[#3b1769]/85 max-w-3xl mx-auto">
           Real experiences from our satisfied customers across India.
         </p>
       </div>
       
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-9">
         {stories.map((story, i) => (
-          <div key={i} className="group bg-[var(--white)] rounded-3xl shadow-lg p-8 border-2 border-[var(--secondary-color)]/20 hover:border-[var(--primary-color)]/40 transition-all duration-300 card-hover">
-            <div className="flex flex-col items-center text-center">
-              <div className="relative mb-6">
-                <img 
-                  src={story.avatar} 
-                  alt={story.name} 
-                  className="w-20 h-20 rounded-full border-4 border-[var(--secondary-color)]/30 group-hover:border-[var(--primary-color)]/50 transition-all duration-300 object-cover" 
-                />
-                <div className="absolute -top-2 -right-2 bg-[var(--secondary-color)] text-[var(--white)] rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold">
-                  ★
-                </div>
+          <div
+            key={i}
+            className="group bg-gradient-to-br from-white/95 via-[#e7edfb]/95 to-white/100 rounded-3xl shadow-2xl hover:shadow-3xl border border-[#d0c3f5]/40 hover:border-[#3ec9a7]/60 transition-all duration-300 card-hover px-8 py-10 flex flex-col items-center hover:scale-105"
+          >
+            <div className="relative mb-7">
+              <img 
+                src={story.avatar} 
+                alt={story.name}
+                className="w-24 h-24 rounded-full border-4 border-[#3ec9a7]/50 group-hover:border-[#4d21b9]/70 transition-all duration-300 object-cover shadow-lg"
+                loading="lazy"
+                draggable={false}
+              />
+              <div className="absolute -top-2 -right-2 bg-[#4d21b9] text-white rounded-full w-8 h-8 flex items-center justify-center text-lg font-extrabold shadow-md animate-pulse">
+                ★
               </div>
-              
-              <h3 className="text-xl font-bold text-[var(--secondary-color)] mb-4 group-hover:text-[var(--primary-color)] transition-colors duration-300">
-                {story.name}
-              </h3>
-              
-              <div className="flex items-center gap-1 mb-4">
-                {[...Array(story.rating)].map((_, i) => (
-                  <span key={i} className="text-[var(--secondary-color)] text-xl">★</span>
-                ))}
-              </div>
-              
-              <p className="text-[var(--text-secondary)] italic leading-relaxed">
-                "{story.quote}"
-              </p>
             </div>
+            <h3 className="text-xl font-bold text-[#3ec9a7] mb-3 group-hover:text-[#4d21b9] transition-colors duration-300">
+              {story.name}
+            </h3>
+            <div className="flex items-center gap-1 mb-3 justify-center">
+              {[...Array(story.rating)].map((_, i) => (
+                <span key={i} className="text-[#3ec9a7] text-lg group-hover:text-[#4d21b9] transition-colors">★</span>
+              ))}
+            </div>
+            <p className="text-[#3b1769]/90 text-center italic font-medium leading-relaxed">
+              "{story.quote}"
+            </p>
           </div>
         ))}
       </div>
       
       <div className="text-center mt-12">
-        <button className="bg-[var(--primary-color)] text-[var(--white)] px-8 py-4 rounded-full font-bold text-lg shadow-lg hover:bg-[var(--primary-dark)] transition-all duration-300 transform hover:scale-105 button-glow">
+        <button className="bg-gradient-to-r from-[#4d21b9] to-[#3ec9a7] text-white px-10 py-4 rounded-full font-bold text-lg shadow-xl hover:scale-105 transition-all duration-300">
           Share Your Story
         </button>
       </div>
@@ -79,4 +79,4 @@ const CustomerStories = () => (
   </section>
 );
 
-export default CustomerStories; 
+export default CustomerStories;
