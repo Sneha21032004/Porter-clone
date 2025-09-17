@@ -27,10 +27,10 @@ router.get('/drivers', verifyToken, verifyAdmin, async (req, res) => {
   }
 });
 
-// PATCH /api/admin/driver-status/:id
 router.patch('/driver-status/:id', verifyToken, verifyAdmin, async (req, res) => {
   const { id } = req.params; // This should be the document's id
   const { status } = req.body;
+
   if (!['Approved', 'Rejected'].includes(status)) {
     return res.status(400).json({ error: 'Invalid status' });
   }
@@ -50,22 +50,21 @@ router.patch('/driver-status/:id', verifyToken, verifyAdmin, async (req, res) =>
 });
 
 
-
 // PATCH /api/admin/disable-user/:id
 router.patch('/disable-user/:id', verifyToken, verifyAdmin, async (req, res) => {
   const { id } = req.params;
-  const { disable } = req.body; // true or false
-
   try {
-    await db.execute(
-      'UPDATE users SET is_login_disabled = ? WHERE id = ?',
-      [disable ? 1 : 0, id]
-    );
-    res.json({ message: `User login has been ${disable ? 'disabled' : 'enabled'}.` });
+    const [user] = await db.execute('SELECT is_login_disabled FROM users WHERE id = ?', [id]);
+    if (!user.length) return res.status(404).json({ error: 'User not found.' });
+
+    const newStatus = user[0].is_login_disabled ? 0 : 1;
+    await db.execute('UPDATE users SET is_login_disabled = ? WHERE id = ?', [newStatus, id]);
+    res.json({ message: `User login has been ${newStatus ? 'disabled' : 'enabled'}.` });
   } catch (err) {
-    res.status(500).json({ error: 'Failed to update user status' });
+    res.status(500).json({ error: 'Failed to update user status.' });
   }
 });
+
 
 router.get('/users', verifyToken, verifyAdmin, async (req, res) => {
   try {
@@ -77,6 +76,41 @@ router.get('/users', verifyToken, verifyAdmin, async (req, res) => {
     res.status(500).json({ error: 'Failed to fetch users' });
   }
 });
+// GET /api/admin/payments
+router.get('/payments', verifyToken, verifyAdmin, async (req, res) => {
+  try {
+    const [payments] = await db.execute('SELECT * FROM payments ORDER BY created_at DESC');
+    res.json(payments);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch payments' });
+  }
+});
+router.get('/stats', verifyToken, verifyAdmin, async (req, res) => {
+  try {
+    const [[userCount]] = await db.execute("SELECT COUNT(*) as total FROM users");
+    const [[driverCount]] = await db.execute("SELECT COUNT(*) as total FROM users WHERE usertype = 'driver'");
+    const [[pendingDocs]] = await db.execute("SELECT COUNT(*) as total FROM driver_documents WHERE status = 'Pending'");
+    const [[paymentTotal]] = await db.execute("SELECT SUM(price) as total FROM payments");
+
+    res.json({
+      users: userCount.total,
+      drivers: driverCount.total,
+      pendingVerifications: pendingDocs.total,
+      revenue: paymentTotal.total || 0
+    });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch stats' });
+  }
+});
+router.get('/bookings', verifyToken, verifyAdmin, async (req, res) => {
+  try {
+    const [bookings] = await db.execute('SELECT * FROM bookings ORDER BY created_at DESC');
+    res.json(bookings);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch bookings' });
+  }
+});
+
 
 
 export default router; 

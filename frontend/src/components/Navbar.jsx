@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
-const Navbar = ({ login }) => {
+const Navbar = ({ login, setlogin }) => {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -14,11 +15,11 @@ const Navbar = ({ login }) => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-const handleLogout = () => {
+  const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('usertype');
     if (setlogin) setlogin(false); // If you use a login state in parent
-    navigate('/login');
+    navigate('/logout');
   };
   return (
     <nav
@@ -70,6 +71,14 @@ const handleLogout = () => {
                   </button>
                 </NavLink>
               </>
+            )}
+            {login && (
+              <button
+                onClick={handleLogout}
+                className="bg-red-500 text-white font-medium px-4 py-2 rounded-lg transition-all duration-300 hover:bg-red-600 hover:scale-105 text-base"
+              >
+                Logout
+              </button>
             )}
             <NavLink to="/support">
               <button className="bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-medium px-5 py-2 rounded-lg transition-all duration-300 hover:shadow-lg hover:scale-105 text-base">
