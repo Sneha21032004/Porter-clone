@@ -14,7 +14,6 @@ router.post(
   ]),
   async (req, res) => {
     try {
-      // ✅ Check and log file presence
       if (!req.files || !req.files['license'] || !req.files['aadhar']) {
         return res.status(400).json({ message: 'Both license and aadhar files are required.' });
       }
@@ -30,14 +29,30 @@ router.post(
       console.log('📄 License URL:', licenseUrl);
       console.log('📄 Aadhar URL:', aadharUrl);
 
-      // ✅ Save to database with status "Pending"
-      await db.execute(
-        `INSERT INTO driver_documents (user_id, license_url, aadhar_url, status) 
-         VALUES (?, ?, ?, ?)`,
-        [req.user.id, licenseUrl, aadharUrl, 'Pending']
+      // Step 1: Check if record already exists for this user
+      const [existingRows] = await db.execute(
+        'SELECT id FROM driver_documents WHERE user_id = ?',
+        [req.user.id]
       );
 
-      res.status(200).json({ message: 'Documents uploaded successfully. Status: Pending' });
+      if (existingRows.length > 0) {
+        // Step 2: UPDATE existing record
+        await db.execute(
+          `UPDATE driver_documents 
+           SET license_url = ?, aadhar_url = ?, status = 'Pending', uploaded_at = NOW() 
+           WHERE user_id = ?`,
+          [licenseUrl, aadharUrl, req.user.id]
+        );
+      } else {
+        // Step 3: INSERT new record
+        await db.execute(
+          `INSERT INTO driver_documents (user_id, license_url, aadhar_url, status, uploaded_at)
+           VALUES (?, ?, ?, 'Pending', NOW())`,
+          [req.user.id, licenseUrl, aadharUrl]
+        );
+      }
+
+      res.status(200).json({ message: 'Documents uploaded successfully. Status set to Pending.' });
     } catch (err) {
       console.error('❌ Upload Error:', err);
       res.status(500).json({ message: 'Failed to upload documents', error: err.message });

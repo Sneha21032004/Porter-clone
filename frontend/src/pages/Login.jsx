@@ -56,19 +56,32 @@ const Login = ({ setlogin }) => {
       }
       console.log('Login response:', data);
       console.log('Role:', data.role);
+      console.log('Driver Verified:', data.driverVerified);
 
-      localStorage.setItem('token', data.token); // ✅ data instead of res
-      localStorage.setItem('usertype', data.role);
+
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('role', data.role);
+      localStorage.setItem('user_id', data.id);
+      
+      // Store user role
       // ✅ this must be 'admin' for admin users
 
       setlogin(true);
       // ✅ Role-based redirection
       if (data.role === 'admin') {
-        navigate('/admin');
+        navigate('/admin/dashboard');
+
       } else if (data.role === 'driver') {
-        navigate('/driver-page');
+        localStorage.setItem('driver_doc_status', data.driverVerified ? 'Approved' : 'NotApproved');
+
+        if (data.driverVerified) {
+          navigate('/driver/dashboard');
+        } else {
+          navigate('/driver-page'); // Driver must upload or wait for approval
+        }
+
       } else {
-        navigate('/');
+        navigate('/book'); // Regular user
       }
 
 
